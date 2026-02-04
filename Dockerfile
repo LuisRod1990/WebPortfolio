@@ -13,7 +13,7 @@ RUN npm run build -- --configuration production
 FROM nginx:stable-alpine
 
 # Copiar configuración personalizada de Nginx
-COPY nginx.conf /etc/nginx/conf.d/webportfolio.conf
+COPY nginx.conf /etc/nginx/conf.d/portfolio-ui.conf
 
 # Copiar archivos compilados de Angular
 COPY --from=build /app/dist/app-portfolio /usr/share/nginx/html
