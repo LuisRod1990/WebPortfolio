@@ -50,5 +50,5 @@ jobs:
           docker load < /home/ec2-user/portfolio-ui.tar.gz
           docker stop portfolio-ui || true
           docker rm portfolio-ui || true
-          docker run -d --restart always --name portfolio-ui -p 5002:5002 portfolio-ui:latest
+          docker run -d --restart always --name portfolio-ui -p 5003:5003 portfolio-ui:latest
           

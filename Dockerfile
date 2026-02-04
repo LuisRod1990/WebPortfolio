@@ -18,5 +18,5 @@ COPY nginx.conf /etc/nginx/conf.d/portfolio-ui.conf
 # Copiar archivos compilados de Angular
 COPY --from=build /app/dist/app-portfolio /usr/share/nginx/html
 
-EXPOSE 5002
+EXPOSE 5003
 CMD ["nginx", "-g", "daemon off;"]
