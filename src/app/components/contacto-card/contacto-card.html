@@ -1,0 +1,61 @@
+
+@if (loading) {
+  <app-loading message="Cargando contacto..."></app-loading>
+} @else {
+  <mat-card class="contacto-card">
+<mat-card-header class="card-header">
+  <!-- Izquierda: foto + nombre + título -->
+  <div class="header-left">
+    <img src="assets/images/FOTO_CV.png" alt="Foto de Portafolio" class="foto-perfil" />
+    <div class="card-header-info">
+      <mat-card-subtitle class="nombre">{{ contacto.nombre }} {{ contacto.apellidos }}</mat-card-subtitle>
+      <mat-card-subtitle class="titulo">{{ contacto.titulo }}</mat-card-subtitle>
+    </div>
+  </div>
+
+  <!-- Derecha: email, teléfono, dirección -->
+  <div class="header-right">
+    <div class="info-item-no-background" matTooltip="Correo Electrónico">
+      <span>{{ contacto.email }}</span>
+      <mat-icon>email</mat-icon>
+    </div>
+    <div class="info-item-no-background">
+      <span>{{ contacto.celular }}</span>
+      <mat-icon>phone</mat-icon>
+    </div>
+    <div class="info-item-no-background">
+      <span>{{ contacto.direccion }}</span>
+      <mat-icon>location_on</mat-icon>
+    </div>
+  </div>
+</mat-card-header>
+    <mat-card-content class="card-content">
+      <br>
+      <section class="info-grid">
+        <div class="info-line">
+        <div class="info-item">
+          <mat-icon>calendar_today</mat-icon>
+          <span>{{ contacto.fechanacimiento | date:'longDate' }}</span>
+        </div>
+        <div class="info-item">
+          <mat-icon>badge</mat-icon>
+          <span>RFC: {{ contacto.rfc }}</span>
+        </div>
+        <div class="info-item">
+          <mat-icon>fingerprint</mat-icon>
+          <span>CURP: {{ contacto.curp }}</span>
+        </div>
+        <div class="info-item">
+          <mat-icon>verified</mat-icon>
+          <span>Cédula: {{ contacto.cedula }}</span>
+        </div>
+        </div>
+      </section>
+<br>
+      <section class="resumen">
+        <p>{{ contacto.resumenperfil }}</p>
+        
+      </section>
+    </mat-card-content>
+  </mat-card>
+  }
