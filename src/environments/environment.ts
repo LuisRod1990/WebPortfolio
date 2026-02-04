@@ -1,9 +1,7 @@
 export const environment = {
   production: true,
-  //authApi: 'https://localhost:44344/api/auth',  // API de autenticación en prod
-  //dataApi: 'https://localhost:44347/api/Portfolio',       // API de información en prod
-  authApi: 'https://localhost:44339/api/auth',  // API de autenticación en prod
-  dataApi: 'https://localhost:44347/api/Portfolio',       // API de información en prod
+  authApi: 'https://larj-services.duckdns.org/api/auth',  // API de autenticación en prod
+  dataApi: 'http://ec2-3-142-208-223.us-east-2.compute.amazonaws.com:5001/api/Portfolio',       // API de información en prod
   endpoints: {
     login: '/login',
     refresh: '/refresh',
