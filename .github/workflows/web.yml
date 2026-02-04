@@ -51,3 +51,4 @@ jobs:
           docker stop portfolio-ui || true
           docker rm portfolio-ui || true
           docker run -d --restart always --name portfolio-ui -p 5002:5002 portfolio-ui:latest
+          
