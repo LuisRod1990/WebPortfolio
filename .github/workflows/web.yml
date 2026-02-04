@@ -1,5 +1,6 @@
 name: Deploy Angular Portfolio to EC2
 
+
 on:
   push:
     branches: [ "main" ]
