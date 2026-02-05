@@ -19,9 +19,6 @@ jobs:
     - name: Run Angular browser build
       run: npm run build -- --configuration production
 
-    - name: Run Angular server build
-      run: ng run app-portfolio:server
-
     # --- Deploy to EC2 ---
     - name: Copy browser files to EC2
       uses: appleboy/scp-action@v0.1.7
