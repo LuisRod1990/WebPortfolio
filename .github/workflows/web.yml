@@ -1,6 +1,5 @@
 name: Deploy Angular Portfolio to EC2
 
-
 on:
   push:
     branches: [ "main" ]
@@ -15,40 +14,26 @@ jobs:
 
     # --- Build Angular ---
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Run Angular build
       run: npm run build -- --configuration production
 
-    # --- Build Docker image ---
-    - name: Build Docker image
-      run: docker build -t portfolio-ui:latest .
-
-    - name: Save Docker image
-      run: docker save portfolio-ui:latest | gzip > portfolio-ui.tar.gz
-
-    - name: Copy image to EC2
+    # --- Deploy to EC2 ---
+    - name: Copy build files to EC2
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
-        source: "portfolio-ui.tar.gz"
-        target: "/home/ec2-user/"
+        source: "dist/app-portfolio/browser/*"
+        target: "/var/www/angular-app/browser/"
 
-    - name: Load and run container on EC2
+    - name: Restart Nginx on EC2
       uses: appleboy/ssh-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          sudo systemctl enable docker
-          sudo systemctl start docker
-          sudo usermod -aG docker ec2-user
-
-          docker load < /home/ec2-user/portfolio-ui.tar.gz
-          docker stop portfolio-ui || true
-          docker rm portfolio-ui || true
-          docker run -d --restart always --name portfolio-ui -p 5003:5003 portfolio-ui:latest
-          
+          sudo systemctl restart nginx
