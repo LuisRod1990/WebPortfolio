@@ -69,7 +69,6 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-           
             "production": {
               "buildTarget": "app-portfolio:build:production"
             },
@@ -78,6 +77,24 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/app-portfolio/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
         },
         "test": {
           "builder": "@angular/build:unit-test"

@@ -16,11 +16,14 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run Angular build
+    - name: Run Angular browser build
       run: npm run build -- --configuration production
 
+    - name: Run Angular server build
+      run: ng run app-portfolio:server
+
     # --- Deploy to EC2 ---
-    - name: Copy build files to EC2
+    - name: Copy browser files to EC2
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -28,6 +31,26 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "dist/app-portfolio/browser/*"
         target: "/var/www/angular-app/browser/"
+
+    - name: Copy server files to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        source: "dist/app-portfolio/server/*"
+        target: "/var/www/angular-app/server/"
+
+    - name: Restart Angular SSR with PM2
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          pm2 delete angular-ssr || true
+          pm2 start /var/www/angular-app/server/server.mjs --name angular-ssr --interpreter node -- --port=5003
+          pm2 save
 
     - name: Restart Nginx on EC2
       uses: appleboy/ssh-action@v0.1.7
