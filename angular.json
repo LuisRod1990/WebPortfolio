@@ -96,6 +96,15 @@
           },
           "defaultConfiguration": "production"
         },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "routes": [
+              "/",
+              "/about"
+            ]
+          }
+        },
         "test": {
           "builder": "@angular/build:unit-test"
         }
