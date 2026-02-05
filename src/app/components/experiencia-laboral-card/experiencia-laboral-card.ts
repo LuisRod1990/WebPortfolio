@@ -7,6 +7,8 @@ import { DatePipe, CommonModule } from '@angular/common';
 import { Loading } from '../../shared/loading/loading'; // 👈 importa tu componente de loading
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { EmpresaGroup } from '../../models/empresa-group'
+import { StorageService } from '../../services/storage';
+
 @Component({
   selector: 'app-experiencia-laboral-card',
   standalone: true,
@@ -25,8 +27,9 @@ export class ExperienciaLaboralCard implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private authService: AuthService, // 👈 inyecta AuthService
-    private cd: ChangeDetectorRef
+    private authService: AuthService,
+    private cd: ChangeDetectorRef,
+    private storage: StorageService
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +47,8 @@ export class ExperienciaLaboralCard implements OnInit {
       next: res => {
         this.token = res.accessToken;
         this.refreshToken = res.refreshToken;
-
-        localStorage.setItem('token', this.token);
-        localStorage.setItem('refreshToken', this.refreshToken);
-
+        this.storage.set('token', this.token);
+        this.storage.set('refreshToken', this.refreshToken);
         this.getExperienciasLaborales();
       },
       error: err => {
@@ -83,7 +84,7 @@ export class ExperienciaLaboralCard implements OnInit {
       .subscribe({
         next: res => {
           this.token = res.accessToken;
-          localStorage.setItem('token', this.token);
+          this.storage.set('token', this.token);
           this.getExperienciasLaborales();
         },
         error: err => {

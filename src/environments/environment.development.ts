@@ -1,7 +1,9 @@
 export const environment = {
   production: false,
-  authApi: 'http://ec2-3-142-208-223.us-east-2.compute.amazonaws.com:5000/api/auth',  // API de autenticación en prod
-  dataApi: 'http://ec2-3-142-208-223.us-east-2.compute.amazonaws.com:5001/api/Portfolio',       // API de información en prod
+  //authApi: 'http://ec2-3-142-208-223.us-east-2.compute.amazonaws.com:5000/api/auth',
+  //dataApi: 'http://ec2-3-142-208-223.us-east-2.compute.amazonaws.com:5001/api/Portfolio',
+  authApi: 'https://localhost:44339/api/auth',
+  dataApi: 'https://localhost:44347/api/Portfolio',
   endpoints: {
     login: '/login',
     refresh: '/refresh',
@@ -13,3 +15,5 @@ export const environment = {
     getTotalExperiencia: '/get_totalexperiencia',
   }
 };
+
+

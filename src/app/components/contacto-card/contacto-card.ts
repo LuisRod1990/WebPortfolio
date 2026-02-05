@@ -5,9 +5,11 @@ import { DatePipe, CommonModule } from '@angular/common';
 import { Contacto } from '../../models/contacto';
 import { DataService } from '../../services/data';
 import { AuthService } from '../../services/auth';
-import { Loading } from '../../shared/loading/loading'; // ajusta la ruta
+import { Loading } from '../../shared/loading/loading';
 import { finalize } from 'rxjs/operators';
 import { DragDropModule } from '@angular/cdk/drag-drop'
+import { StorageService } from '../../services/storage';
+
 @Component({
   selector: 'app-contacto-card',
   standalone: true,
@@ -24,7 +26,8 @@ export class ContactoCard implements OnInit {
   constructor(
     private dataService: DataService,
     private authService: AuthService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private storage: StorageService
   ) {}
   
   ngOnInit(): void {
@@ -46,9 +49,9 @@ export class ContactoCard implements OnInit {
         this.refreshToken = res.refreshToken;
 
         // Guardamos en localStorage para que el interceptor lo use
-        localStorage.setItem('token', this.token);
-        localStorage.setItem('refreshToken', this.refreshToken);
-
+        this.storage.set('token', this.token);
+        this.storage.set('refreshToken', this.refreshToken);
+        
         // Ahora sí, cargamos el contacto
         this.getContacto();
       },
@@ -69,7 +72,6 @@ export class ContactoCard implements OnInit {
         next: (data: Contacto[]) => {
           this.contacto = data[0]; // tu API devuelve un array
           this.cd.detectChanges();
-          console.log('Contacto cargado:', this.contacto);
         },
         error: err => {
           console.error('Error al cargar contacto:', err);
@@ -86,12 +88,12 @@ export class ContactoCard implements OnInit {
 
     this.authService.refreshToken()
       .pipe(
-        finalize(() => this.loading = false) // 👈 siempre se ejecuta al terminar
+        finalize(() => this.loading = false)
       )
       .subscribe({
         next: res => {
           this.token = res.accessToken;
-          localStorage.setItem('token', this.token);
+          this.storage.set('token', this.token);
           this.getContacto();
         },
         error: err => {

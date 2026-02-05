@@ -57,7 +57,7 @@ if (isMainModule(import.meta.url) || process.env['pm_id']) {
     if (error) {
       throw error;
     }
-    console.log(`✅ Node Express server escuchando en http://localhost:${port}`);
+    console.log(`Node Express server escuchando en http://localhost:${port}`);
   });
 }
 

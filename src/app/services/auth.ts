@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { AuthResponse } from '../models/auth-response';
+import { StorageService } from '../services/storage';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private accessToken: string | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private storage: StorageService) {}
 
   login(credentials: { username: string; password: string }): Observable<AuthResponse> {
     const url = `${environment.authApi}${environment.endpoints.login}`;
@@ -16,16 +17,20 @@ export class AuthService {
 
     return this.http.post<AuthResponse>(url, body).pipe(
       tap(response => {
-        console.log('respuesta login:', response);
         this.setToken(response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
+        if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+            this.storage.set('refreshToken', response.refreshToken);
+          }
       })
     );
   }
 
   refreshToken(): Observable<AuthResponse> {
     const url = `${environment.authApi}${environment.endpoints.refresh}`;
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshToken = typeof window !== 'undefined' && typeof localStorage !== 'undefined'
+      ? this.storage.get('refreshToken')
+      : null;
+
 
     // Si tu API espera un string plano:
     return this.http.post<AuthResponse>(url, JSON.stringify(refreshToken), {
@@ -40,12 +45,12 @@ export class AuthService {
 
   private setToken(token: string) {
     this.accessToken = token;
-    localStorage.setItem('accessToken', token);
+    this.storage.set('accessToken', token);
   }
 
   getToken(): string | null {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      return localStorage.getItem('token');
+      return this.storage.get('token');
     }
     return null;
   }

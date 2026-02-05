@@ -10,6 +10,9 @@ import { AuthService } from '../../services/auth';
 import { Loading } from '../../shared/loading/loading';
 import { Experiencia } from '../../models/experiencia-total';
 import { DragDropModule } from '@angular/cdk/drag-drop'
+import { HttpErrorResponse } from '@angular/common/http';
+import { StorageService } from '../../services/storage';
+
 @Component({
   selector: 'app-aptitudes-card',
   standalone: true,
@@ -42,7 +45,8 @@ export class AptitudesCard implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService,
     private authService: AuthService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private storage: StorageService
   ) {}
 
   // Dentro de AptitudesCard
@@ -77,10 +81,8 @@ export class AptitudesCard implements OnInit, OnDestroy {
       next: res => {
         this.token = res.accessToken;
         this.refreshToken = res.refreshToken;
-
-        localStorage.setItem('token', this.token);
-        localStorage.setItem('refreshToken', this.refreshToken);
-
+        this.storage.set('token', this.token);
+        this.storage.set('refreshToken', this.refreshToken);
         this.getAptitudes();
         this.getSkills();
         this.getExperiencias();
@@ -157,14 +159,14 @@ export class AptitudesCard implements OnInit, OnDestroy {
     this.authService.refreshToken()
       .pipe(finalize(() => this.loading = false))
       .subscribe({
-        next: res => {
+        next:  (res) => {
           this.token = res.accessToken;
-          localStorage.setItem('token', this.token);
+          this.storage.set('token', this.token);
           this.getAptitudes();
           this.getSkills();
           this.getExperiencias();
         },
-        error: err => {
+        error: (err: HttpErrorResponse) => {
           console.error('Error en refresh:', err);
         }
       });
