@@ -7,7 +7,10 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:app-portfolio": "node dist/app-portfolio/server/server.mjs"
+
+    "build:ssr": "ng build --configuration production && ng run app-portfolio:server:production",
+    "serve:ssr": "node dist/app-portfolio/server/main.js",
+    "prerender": "ng run app-portfolio:prerender"
   },
   "prettier": {
     "printWidth": 100,

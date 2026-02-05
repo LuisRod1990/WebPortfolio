@@ -1,10 +1,9 @@
 /* Contacto con diseño light neumórfico */
 .contacto-card {
-  max-width: 100%;
-  width: 95%; /* asegura que no se salga del viewport */
-  max-height: 100vh;
-  margin: 16px auto;
-  padding: 1.5rem;
+  width: 100vw;        /* ancho completo de la ventana */
+  height: 100vh;       /* alto completo de la ventana */
+  margin: 0;           /* sin márgenes */
+  padding: 2rem;       /* espacio interno */
   border-radius: 20px;
   background: #e0e0e0;
   box-shadow: 9px 9px 16px #bebebe, -9px -9px 16px #ffffff;
